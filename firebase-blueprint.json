@@ -1,0 +1,37 @@
+{
+  "entities": {
+    "AppConfig": {
+      "title": "AppConfig",
+      "description": "App configuration including PIN and Google Apps Script URL shared across devices.",
+      "type": "object",
+      "properties": {
+        "pin": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 10,
+          "description": "The PIN required to unlock the dashboard on any device."
+        },
+        "appsScriptUrl": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "The deployed Google Apps Script Web App URL."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last configuration change."
+        }
+      },
+      "required": [
+        "pin",
+        "appsScriptUrl"
+      ]
+    }
+  },
+  "firestore": {
+    "/settings/{documentId}": {
+      "schema": "AppConfig",
+      "description": "Collection storing application-wide configurations."
+    }
+  }
+}

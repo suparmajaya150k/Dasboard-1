@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // App config settings
+    match /settings/{documentId} {
+      // Helper function to validate config properties
+      function isValidAppConfig(data) {
+        return data.keys().hasAll(['pin', 'appsScriptUrl']) &&
+               data.pin is string && data.pin.size() >= 4 && data.pin.size() <= 10 &&
+               data.appsScriptUrl is string && data.appsScriptUrl.size() <= 500;
+      }
+
+      allow read: if true;
+      allow create, update: if isValidAppConfig(request.resource.data);
+      allow delete: if false;
+    }
+  }
+}
